@@ -1,0 +1,126 @@
+# ------------------------------------------------------
+# THIS FILE WAS AUTOMATICALLY GENERATED (DO NOT MODIFY)
+# ------------------------------------------------------
+
+type User {
+  id: ID!
+  fullName: String!
+  email: String!
+  roles: [String!]!
+  isActive: Boolean!
+  lastUpdatedBy: User
+  dogCount: Int!
+  listCount: Int!
+  dogs(offset: Int = 0, limit: Int = 10, search: String): [Dog!]!
+  lists(offset: Int = 0, limit: Int = 10, search: String): [List!]!
+}
+
+type List {
+  id: ID!
+  name: String!
+  user: User!
+  listDog: [ListDog!]!
+  dogs: [ListDog!]!
+}
+
+type ListDog {
+  id: ID!
+  quantity: Int!
+  paid: Boolean!
+  list: List!
+  dog: Dog!
+}
+
+type Dog {
+  id: ID!
+  name: String!
+  breed: String!
+  neutered: Boolean!
+  user: User!
+}
+
+type AuthResponse {
+  token: String!
+  user: User!
+}
+
+type Query {
+  revalidate: AuthResponse!
+  users(roles: [ValidRoles!] = []): [User!]!
+  user(id: ID!): User!
+  dogs(offset: Int = 0, limit: Int = 10, search: String): [Dog!]!
+  dog(id: ID!): Dog!
+  lists(offset: Int = 0, limit: Int = 10, search: String): [List!]!
+  list(id: ID!): List!
+  listDog: [ListDog!]!
+}
+
+enum ValidRoles {
+  admin
+  user
+  superUser
+}
+
+type Mutation {
+  signup(signupInput: SignupInput!): AuthResponse!
+  login(loginInput: LoginInput!): AuthResponse!
+  updateUser(updateUserInput: UpdateUserInput!): User!
+  blockUser(id: ID!): User!
+  createDog(createDogInput: CreateDogInput!): Dog!
+  updateDog(updateDogInput: UpdateDogInput!): Dog!
+  removeDog(id: ID!): Dog!
+  createList(createListInput: CreateListInput!): List!
+  updateList(updateListInput: UpdateListInput!): List!
+  removeList(id: ID!): List!
+  createListDog(createListDogInput: CreateListDogInput!): ListDog!
+  executeSeed: Boolean!
+}
+
+input SignupInput {
+  email: String!
+  fullName: String!
+  password: String!
+}
+
+input LoginInput {
+  email: String!
+  password: String!
+}
+
+input UpdateUserInput {
+  email: String
+  fullName: String
+  password: String
+  id: ID!
+  roles: [ValidRoles!]
+  isActive: Boolean
+}
+
+input CreateDogInput {
+  name: String!
+  breed: String!
+  neutered: Boolean!
+}
+
+input UpdateDogInput {
+  name: String
+  breed: String
+  neutered: Boolean
+  id: ID!
+}
+
+input CreateListInput {
+  name: String!
+}
+
+input UpdateListInput {
+  name: String
+  id: ID!
+}
+
+input CreateListDogInput {
+  quantity: Int = 1
+  paid: Boolean = false
+  listId: ID!
+  dogId: ID!
+}
