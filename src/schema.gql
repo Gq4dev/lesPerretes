@@ -31,6 +31,13 @@ type ListDog {
   dog: Dog!
 }
 
+type Reservation {
+  id: ID!
+  startDate: String!
+  endDate: String!
+  serviceType: String!
+}
+
 type Dog {
   id: ID!
   name: String!
@@ -53,6 +60,9 @@ type Query {
   lists(offset: Int = 0, limit: Int = 10, search: String): [List!]!
   list(id: ID!): List!
   listDog: [ListDog!]!
+  reservations: [Reservation!]!
+  getReservationsByDate(startDate: String!, endDate: String!): [Reservation!]!
+  reservation(id: Int!): Reservation!
 }
 
 enum ValidRoles {
@@ -74,6 +84,9 @@ type Mutation {
   removeList(id: ID!): List!
   createListDog(createListDogInput: CreateListDogInput!): ListDog!
   executeSeed: Boolean!
+  createReservation(createReservationInput: CreateReservationInput!): Reservation!
+  updateReservation(updateReservationInput: UpdateReservationInput!): Reservation!
+  removeReservation(id: Int!): Reservation!
 }
 
 input SignupInput {
@@ -123,4 +136,22 @@ input CreateListDogInput {
   paid: Boolean = false
   listId: ID!
   dogId: ID!
+}
+
+input CreateReservationInput {
+  startDate: DateTime!
+  endDate: DateTime!
+  serviceType: String!
+}
+
+"""
+A date-time string at UTC, such as 2019-12-03T09:54:33Z, compliant with the date-time format.
+"""
+scalar DateTime
+
+input UpdateReservationInput {
+  startDate: DateTime
+  endDate: DateTime
+  serviceType: String
+  id: ID!
 }

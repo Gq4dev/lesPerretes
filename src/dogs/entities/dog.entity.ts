@@ -1,5 +1,6 @@
 import { ObjectType, Field, ID } from '@nestjs/graphql';
 import { ListDog } from 'src/list-dog/entities/list-dog.entity';
+import { Reservation } from 'src/reservations/entities/reservation.entity';
 import { User } from 'src/users/entities/user.entity';
 import { Column, Entity, Index, ManyToOne, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
 
@@ -23,10 +24,10 @@ export class Dog {
   @Field(() => Boolean)
   neutered: boolean
 
-  @ManyToOne(() => User, (user) => user.dogs, { nullable: false, lazy: true })
-  @Index('userId-index')
-  @Field(() => User)
-  user: User
+  // @ManyToOne(() => User, (user) => user.dogs, { nullable: false, lazy: true })
+  // @Index('userId-index')
+  // @Field(() => User)
+  // user: User
 
 
   @OneToMany(() => ListDog, (listDog) => listDog.dog, { lazy: true })
@@ -34,4 +35,11 @@ export class Dog {
   listDog: ListDog[]
 
 
+  @ManyToOne(() => User, (user) => user.dogs, { nullable: false, lazy: true })
+  @Index('userId-index')
+  @Field(() => User)
+  user: User
+
+  @OneToMany(() => Reservation, reservation => reservation.dog)
+  reservations: Reservation[];
 }

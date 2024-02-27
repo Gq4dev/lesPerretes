@@ -13,6 +13,7 @@ import { ListDogService } from 'src/list-dog/list-dog.service';
 
 @Resolver(() => List)
 @UseGuards(JwtAuthGuard)
+
 export class ListsResolver {
   constructor(
     private readonly listsService: ListsService,

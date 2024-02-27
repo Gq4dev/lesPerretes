@@ -16,6 +16,7 @@ import { SeedModule } from './seed/seed.module';
 import { CommonModule } from './common/common.module';
 import { ListsModule } from './lists/lists.module';
 import { ListDogModule } from './list-dog/list-dog.module';
+import { ReservationsModule } from './reservations/reservations.module';
 
 
 
@@ -72,6 +73,7 @@ import { ListDogModule } from './list-dog/list-dog.module';
     CommonModule,
     ListsModule,
     ListDogModule,
+    ReservationsModule,
   ],
   controllers: [],
   providers: [],
