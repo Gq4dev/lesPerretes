@@ -4,6 +4,7 @@ import { UpdateReservationInput } from './dto/update-reservation.input';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Reservation } from './entities/reservation.entity';
 import { Between, LessThanOrEqual, MoreThanOrEqual, Repository } from 'typeorm';
+import { PaginationArgs, SearchArgs } from 'src/common/dto/args';
 
 @Injectable()
 export class ReservationsService {
@@ -38,13 +39,18 @@ export class ReservationsService {
     return this.reservationRepository.find({ where: { id } });
   }
 
-  async getReservationsByDate(startDate: string, endDate: string): Promise<Reservation[]> {
+  async getReservationsByDate(paginationArgs: PaginationArgs, searchArgs: SearchArgs): Promise<Reservation[]> {
 
-    return this.reservationRepository.find({
-      where: {
-        startDate: Between(startDate, endDate),
-      },
-      relations: ['dog']
-    })
+    const { limit, offset } = paginationArgs
+    const { search, startDate, endDate } = searchArgs
+
+    const queryBuilder = this.reservationRepository.createQueryBuilder('reservation')
+      .take(limit)
+      .skip(offset)
+      .where('reservation.startDate BETWEEN :startDate AND :endDate', { startDate, endDate })
+      .leftJoinAndSelect('reservation.dog', 'dog')
+
+    return queryBuilder.getMany()
+
   }
 }

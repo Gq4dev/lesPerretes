@@ -7,6 +7,7 @@ import { UseGuards } from '@nestjs/common';
 import { JwtAuthGuard } from 'src/auth/guards/jwt-auth.guard';
 import { Currentuser } from 'src/auth/decorators/current-user.decorator';
 import { User } from 'src/users/entities/user.entity';
+import { PaginationArgs, SearchArgs } from 'src/common/dto/args';
 
 @Resolver(() => Reservation)
 @UseGuards(JwtAuthGuard)
@@ -31,12 +32,12 @@ export class ReservationsResolver {
 
   @Query(() => [Reservation])
   async getReservationsByDate(
-    @Args('startDate') startDate: string,
-  @Args('endDate') endDate: string
+    @Args() paginationArgs: PaginationArgs,
+    @Args() searchArgs: SearchArgs
   ): Promise<Reservation[]> {
 
 
-    return this.reservationsService.getReservationsByDate(startDate, endDate);
+    return this.reservationsService.getReservationsByDate(paginationArgs, searchArgs);
   }
 
   @Query(() => Reservation, { name: 'reservation' })

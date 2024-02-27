@@ -11,8 +11,8 @@ type User {
   lastUpdatedBy: User
   dogCount: Int!
   listCount: Int!
-  dogs(offset: Int = 0, limit: Int = 10, search: String): [Dog!]!
-  lists(offset: Int = 0, limit: Int = 10, search: String): [List!]!
+  dogs(offset: Int = 0, limit: Int = 10, search: String, startDate: String, endDate: String): [Dog!]!
+  lists(offset: Int = 0, limit: Int = 10, search: String, startDate: String, endDate: String): [List!]!
 }
 
 type List {
@@ -55,13 +55,13 @@ type Query {
   revalidate: AuthResponse!
   users(roles: [ValidRoles!] = []): [User!]!
   user(id: ID!): User!
-  dogs(offset: Int = 0, limit: Int = 10, search: String): [Dog!]!
+  dogs(offset: Int = 0, limit: Int = 10, search: String, startDate: String, endDate: String): [Dog!]!
   dog(id: ID!): Dog!
-  lists(offset: Int = 0, limit: Int = 10, search: String): [List!]!
+  lists(offset: Int = 0, limit: Int = 10, search: String, startDate: String, endDate: String): [List!]!
   list(id: ID!): List!
   listDog: [ListDog!]!
   reservations: [Reservation!]!
-  getReservationsByDate(startDate: String!, endDate: String!): [Reservation!]!
+  getReservationsByDate(offset: Int = 0, limit: Int = 10, search: String, startDate: String, endDate: String): [Reservation!]!
   reservation(id: Int!): Reservation!
 }
 

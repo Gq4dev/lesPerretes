@@ -9,4 +9,14 @@ export class SearchArgs {
     @IsOptional()
     @IsString()
     search?: string
+
+    @Field(() => String, { nullable: true })
+    @IsOptional()
+    @IsString()
+    startDate?: string
+
+    @Field(() => String, { nullable: true })
+    @IsOptional()
+    @IsString()
+    endDate?: string
 }
