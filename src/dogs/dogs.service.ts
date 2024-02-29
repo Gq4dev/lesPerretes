@@ -2,23 +2,38 @@ import { Injectable, NotFoundException } from '@nestjs/common';
 import { CreateDogInput } from './dto/inputs/create-dog.input';
 import { UpdateDogInput } from './dto/inputs/update-dog.input';
 import { Dog } from './entities/dog.entity';
-import { Like, Repository } from 'typeorm';
+import { Repository } from 'typeorm';
 import { InjectRepository } from '@nestjs/typeorm';
 import { User } from 'src/users/entities/user.entity';
 import { PaginationArgs } from 'src/common/dto/args/pagination.args';
 import { SearchArgs } from 'src/common/dto/args';
+import { Owner } from 'src/owner/entities/owner.entity';
 
 @Injectable()
 export class DogsService {
 
   constructor(
     @InjectRepository(Dog)
-    private readonly dogsRepository: Repository<Dog>
+    private readonly dogsRepository: Repository<Dog>,
+
+    @InjectRepository(Owner)
+    private readonly ownerRepository: Repository<Owner>
   ) { }
 
 
   async create(createDogInput: CreateDogInput, user: User): Promise<Dog> {
+
+
     const newDog = this.dogsRepository.create({ ...createDogInput, user })
+
+    const owner = await this.ownerRepository.findOne({ where: { id: createDogInput.ownerId } });
+    if (!owner) {
+      throw new Error(`Owner with ID ${createDogInput.ownerId} not found`);
+    }
+
+    newDog.owner = owner
+
+    console.log(newDog)
 
     return await this.dogsRepository.save(newDog)
 
@@ -29,7 +44,8 @@ export class DogsService {
     const { limit, offset } = paginationArgs
     const { search } = searchArgs
 
-    const queryBuilder = this.dogsRepository.createQueryBuilder()
+    const queryBuilder = this.dogsRepository.createQueryBuilder('dog')
+      .innerJoinAndSelect('dog.owner', 'owner')
       .take(limit)
       .skip(offset)
       .where(`"userId" = :userId`, { userId: user.id })
@@ -40,19 +56,8 @@ export class DogsService {
 
     return queryBuilder.getMany()
 
-    //ENFOQUE 1
-    // return this.dogsRepository.find({
-    //   take: limit,
-    //   skip: offset,
-    //   where: {
-    //     user: {
-    //       id: user.id
-    //     }
-    //   }
-    // })
-
-
   }
+
 
   async findOne(id: string, user: User): Promise<Dog> {
 
@@ -64,7 +69,6 @@ export class DogsService {
     })
 
     if (!dog) throw new NotFoundException(`Dog with id: ${id} not found`)
-
 
 
     return dog

@@ -4,9 +4,10 @@ import { SeedResolver } from './seed.resolver';
 import { ConfigModule } from '@nestjs/config';
 import { UsersModule } from 'src/users/users.module';
 import { DogsModule } from 'src/dogs/dogs.module';
+import { OwnerModule } from 'src/owner/owner.module';
 
 @Module({
   providers: [SeedResolver, SeedService],
-  imports: [ConfigModule, UsersModule, DogsModule]
+  imports: [ConfigModule, UsersModule, DogsModule, OwnerModule]
 })
 export class SeedModule { }

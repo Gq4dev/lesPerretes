@@ -22,6 +22,7 @@ export class ReservationsResolver {
     @Currentuser() user: User
   ): Promise<Reservation> {
 
+    console.log(createReservationInput)
     return this.reservationsService.create(createReservationInput);
   }
 
@@ -35,8 +36,6 @@ export class ReservationsResolver {
     @Args() paginationArgs: PaginationArgs,
     @Args() searchArgs: SearchArgs
   ): Promise<Reservation[]> {
-
-
     return this.reservationsService.getReservationsByDate(paginationArgs, searchArgs);
   }
 

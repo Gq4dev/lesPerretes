@@ -1,4 +1,4 @@
-import { InputType, Field } from '@nestjs/graphql';
+import { InputType, Field, ID } from '@nestjs/graphql';
 import { IsNotEmpty, IsString } from 'class-validator';
 
 @InputType()
@@ -18,5 +18,6 @@ export class CreateDogInput {
   @IsNotEmpty()
   neutered: boolean
 
-
+  @Field(() => String)
+  ownerId: string;
 }

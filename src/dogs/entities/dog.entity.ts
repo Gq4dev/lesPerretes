@@ -1,8 +1,9 @@
 import { ObjectType, Field, ID } from '@nestjs/graphql';
 import { ListDog } from 'src/list-dog/entities/list-dog.entity';
+import { Owner } from 'src/owner/entities/owner.entity';
 import { Reservation } from 'src/reservations/entities/reservation.entity';
 import { User } from 'src/users/entities/user.entity';
-import { Column, Entity, Index, ManyToOne, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
+import { Column, Entity, Index, JoinColumn, ManyToOne, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
 
 @Entity({ name: 'dogs' })
 @ObjectType()
@@ -24,22 +25,21 @@ export class Dog {
   @Field(() => Boolean)
   neutered: boolean
 
-  // @ManyToOne(() => User, (user) => user.dogs, { nullable: false, lazy: true })
-  // @Index('userId-index')
-  // @Field(() => User)
-  // user: User
+  
+  @ManyToOne(() => Owner, (owner) => owner.dogs)
+  @Field(() => Owner)
+  owner: Owner;
+
+  @OneToMany(() => Reservation, reservation => reservation.dog)
+  reservations: Reservation[];
 
 
   @OneToMany(() => ListDog, (listDog) => listDog.dog, { lazy: true })
   // @Field(() => [ListDog])
   listDog: ListDog[]
 
-
-  @ManyToOne(() => User, (user) => user.dogs, { nullable: false, lazy: true })
+  @ManyToOne(() => User, (user) => user.dogs)
   @Index('userId-index')
   @Field(() => User)
   user: User
-
-  @OneToMany(() => Reservation, reservation => reservation.dog)
-  reservations: Reservation[];
 }

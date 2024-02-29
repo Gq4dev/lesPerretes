@@ -17,6 +17,7 @@ import { CommonModule } from './common/common.module';
 import { ListsModule } from './lists/lists.module';
 import { ListDogModule } from './list-dog/list-dog.module';
 import { ReservationsModule } from './reservations/reservations.module';
+import { OwnerModule } from './owner/owner.module';
 
 
 
@@ -74,6 +75,7 @@ import { ReservationsModule } from './reservations/reservations.module';
     ListsModule,
     ListDogModule,
     ReservationsModule,
+    OwnerModule,
   ],
   controllers: [],
   providers: [],

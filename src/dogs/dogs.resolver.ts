@@ -7,10 +7,12 @@ import { JwtAuthGuard } from 'src/auth/guards/jwt-auth.guard';
 import { Currentuser } from 'src/auth/decorators/current-user.decorator';
 import { User } from 'src/users/entities/user.entity';
 import { PaginationArgs, SearchArgs } from 'src/common/dto/args/';
+import { Owner } from 'src/owner/entities/owner.entity';
 
 
 @Resolver(() => Dog)
 @UseGuards(JwtAuthGuard)
+
 export class DogsResolver {
   constructor(private readonly dogsService: DogsService) { }
 
@@ -19,6 +21,8 @@ export class DogsResolver {
     @Args('createDogInput') createDogInput: CreateDogInput,
     @Currentuser() user: User
   ): Promise<Dog> {
+
+    console.log(createDogInput)
 
     return this.dogsService.create(createDogInput, user);
   }
@@ -34,7 +38,7 @@ export class DogsResolver {
   }
 
   @Query(() => Dog, { name: 'dog' })
- async findOne(
+  async findOne(
     @Args('id', { type: () => ID }, ParseUUIDPipe) id: string,
     @Currentuser() user: User
   ): Promise<Dog> {

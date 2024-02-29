@@ -16,6 +16,7 @@ export class ReservationsService {
 
 
   async create(createReservationInput: CreateReservationInput): Promise<Reservation> {
+   
     const reservation = this.reservationRepository.create({ ...createReservationInput });
     return await this.reservationRepository.save(reservation);
   }
